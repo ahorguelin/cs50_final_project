@@ -1,6 +1,7 @@
 python
-Flask
-render_template
-url_for
-redirect
-request
+flask
+flask_sqlalchemy
+werkzeug
+
+
+

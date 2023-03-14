@@ -74,14 +74,14 @@ h1{
 .form-container{
     width: 100vw;
     text-align: center;
+    margin: 1em 0;
 }
 
 form{
-    display: block;
     margin: auto;
     max-width: 25vw;
-    padding: 2em;
-    text-align: center;
+    min-width: 300px;
+    padding: 1em;
 }
 
 form input{
@@ -93,5 +93,3 @@ form input{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
-

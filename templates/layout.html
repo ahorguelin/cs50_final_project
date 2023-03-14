@@ -15,21 +15,24 @@
     <!-- Hamburger menu-->
     <button id="hamburger"></button>
     <nav class="navbar">
+        {% if session["user"] %}
         <div class="navbar-tools">
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Bread-Engine</a></li>
                 <li><a href="#">Recipe-Adaptor</a></li>
                 <li><a href="#">Logs</a></li>
+                <li><a href="/logout">Log-out</a></li>
             </ul>
         </div>
+        {% else %}
         <div class="navbar-login">
             <ul>
                 <li><a href="#">Log-in</a></li>
                 <li><a href="/register">Register</a></li>
-                <li><a href="#">Log-out</a></li>
             </ul>
         </div>
+        {% endif %}
     </nav>
     <!-- Header with dynamic title -->
     <header>
