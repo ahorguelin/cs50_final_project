@@ -1,6 +1,6 @@
 python
 flask
-flask_sqlalchemy
+sqlite3
 werkzeug
 
 

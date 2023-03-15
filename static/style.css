@@ -93,3 +93,15 @@ form input{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+/* Alerts style */
+
+.success{
+    color: #53dd91;
+    font-weight: 600;
+}
+
+.warning{
+    color: #FFB5A7;
+    font-weight: 600;
+}

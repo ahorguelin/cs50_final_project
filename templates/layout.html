@@ -9,13 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
     <script type="text/javascript" src="{{url_for('static', filename='script.js')}}"></script>
-    <title>{{ title }}</title>
+    <title>{% if title %}{{ title }}{% else %}CS50 Bakery {% endif %}</title>
 </head>
 <body>
     <!-- Hamburger menu-->
     <button id="hamburger"></button>
     <nav class="navbar">
-        {% if session["user"] %}
+        {% if session["user_id"] %}
         <div class="navbar-tools">
             <ul>
                 <li><a href="#">Home</a></li>
@@ -28,7 +28,7 @@
         {% else %}
         <div class="navbar-login">
             <ul>
-                <li><a href="#">Log-in</a></li>
+                <li><a href="/login">Log-in</a></li>
                 <li><a href="/register">Register</a></li>
             </ul>
         </div>
@@ -36,9 +36,16 @@
     </nav>
     <!-- Header with dynamic title -->
     <header>
-        <h1>CS Bakery: {% block title %}{% endblock %}</h1>
+        <h1>CS Bakery: {% block title %}{% endblock %} {{ user_id if user_id }}</h1>
     </header>
     <!-- content blocks -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p class="success">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
     {% block main %}{% endblock %}
 </body>
 </html>
