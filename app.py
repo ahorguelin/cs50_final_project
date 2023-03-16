@@ -6,9 +6,12 @@ import sqlite3
 app = Flask(__name__)
 #secret key to use session
 app.secret_key = "secretkey"
+app.config['DEBUG'] = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-#setting up db -- table were created separately
+#setting up db -- table were created separately -- using row factory to get dictionaries
 conn = sqlite3.connect('bakery.db', check_same_thread=False)
+# conn.row_factory = sqlite3.Row
 c = conn.cursor()
 
 #home page logic
@@ -18,6 +21,38 @@ def home():
         return render_template("recipes.html", title = "Home", user_id = session["user_id"])
     else:
         return render_template("recipes.html", title = "Home")
+    
+#Bread engine logic
+@app.route("/bread_engine", methods=["GET", "POST"])
+def bread():
+    if request.method != 'POST':
+        ingredients = c.execute("SELECT NAME FROM ingredients")
+        ingredients = list(sum(ingredients, ()))
+        return render_template('bread_engine.html', ingredients=ingredients)
+
+    #update ingredient to a dict with their name and weight in grammsso that they can be added to the recipe
+    else:
+        recipe = request.form["name"]
+        description = request.form["description"]
+        ingredients = request.form.to_dict()
+
+        #removing elements not needed for the recipe.
+        rem_result = ['name', 'ingredient']
+        for element in rem_result:
+            del ingredients[element]
+    
+        #adding the recipe into the database
+        c.execute("INSERT INTO recipes (name, description, user_id) VALUES (?,?,?)", (recipe, description, session["user_id"]))
+
+        #getting the recipe id from the db
+        #recipe_id = c.lastrowid
+        
+        #getting ids of ingredients from the DB
+        #ingredient_id = dict(c.execute("SELECT * FROM ingredients").fetchall())
+
+        #adding ingredients in the junction table
+
+        return redirect('/')
 
 #register logic
 @app.route("/register", methods=["GET", "POST"])

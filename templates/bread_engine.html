@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}Bread Engine{% endblock %}
+
+{% block main%}
+    <div class="form-container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="warning">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form action="/bread_engine" method="post" id="ingredient-form">
+            <input type="text" name="name" autocomplete="off" autofocus placeholder="Recipe Name"/>
+            <input type="text" name="description" autocomplete="off" placeholder="Recipe description">
+            <button id="add-ingredient" type="button">Add ingredient</button>
+            <button id="rmv-ingredient" type="button">Remove ingredient</button>
+            <select name="ingredient" id="ingredient">
+                {% for ingredient in ingredients %}
+                    <option value="{{ ingredient }}">{{ ingredient }}</option>
+                {% endfor %}
+            </select>
+            <div id="inputs-placeholder">
+
+            </div>
+            <input type="submit" value="Add Recipe">
+        </form>
+    </div>
+{% endblock %}
