@@ -11,7 +11,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 #setting up db -- table were created separately -- using row factory to get dictionaries
 conn = sqlite3.connect('bakery.db', check_same_thread=False)
-# conn.row_factory = sqlite3.Row
+conn.row_factory = sqlite3.Row
 c = conn.cursor()
 
 #home page logic
@@ -26,32 +26,37 @@ def home():
 @app.route("/bread_engine", methods=["GET", "POST"])
 def bread():
     if request.method != 'POST':
-        ingredients = c.execute("SELECT NAME FROM ingredients")
-        ingredients = list(sum(ingredients, ()))
-        return render_template('bread_engine.html', ingredients=ingredients)
+        db_ingredients = c.execute("SELECT * FROM ingredients")
+        return render_template('bread_engine.html', ingredients = db_ingredients)
 
     #update ingredient to a dict with their name and weight in grammsso that they can be added to the recipe
     else:
         recipe = request.form["name"]
         description = request.form["description"]
-        ingredients = request.form.to_dict()
+        form_ingredients = request.form.to_dict()
 
         #removing elements not needed for the recipe.
-        rem_result = ['name', 'ingredient']
+        rem_result = ['name', 'description', 'ingredient']
         for element in rem_result:
-            del ingredients[element]
-    
+            del form_ingredients[element]
+
         #adding the recipe into the database
         c.execute("INSERT INTO recipes (name, description, user_id) VALUES (?,?,?)", (recipe, description, session["user_id"]))
 
         #getting the recipe id from the db
-        #recipe_id = c.lastrowid
+        recipe_id = c.lastrowid
         
-        #getting ids of ingredients from the DB
-        #ingredient_id = dict(c.execute("SELECT * FROM ingredients").fetchall())
-
+        #creating tuple to insert ingredient_recipes in the db
+        data_to_insert = []
+        for ingredient in form_ingredients.items():
+            ingredient += (recipe_id,)
+            data_to_insert.append(ingredient)
+        print(data_to_insert)
         #adding ingredients in the junction table
-
+        c.executemany("INSERT INTO recipe_ingredients (ingredient_id, weight, recipe_id) VALUES (?,?,?)", data_to_insert)
+        
+        #commit recipe and ingredients to DB
+        conn.commit()
         return redirect('/')
 
 #register logic
