@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function(){
         newInput.setAttribute('id', ingredient_name);
         newInput.setAttribute('type', 'number');
         newInput.setAttribute('placeholder', 'Weight in gramms');
-        newInput.setAttribute('name', ingredient_name);
+        newInput.setAttribute('name', ingredient_id);
         
         //add input and label
         newDiv.appendChild(newLabel);
@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', function(){
         //grab the div to be deleted based on user input
         rmvInput = document.querySelector(`#div-ingredient-${ingredient_id}`);
         rmvInput.remove();
+        
+        //remove the choice from the option 
+        document.querySelector(`[value="${ingredient_id}"]`).remove()
 
         //create the deleted option to be added back on usable ingredients
         newOption = document.createElement('option');

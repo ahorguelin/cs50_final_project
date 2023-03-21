@@ -1,12 +1,28 @@
 {% extends "layout.html" %}
 
-{% block title %}Recipes{% endblock %}
+{% block title %} – Recipes{% endblock %}
 
 {% block main %}
-    <div class="flex">
-        <div class="card">
-            <h2>Recipe name</h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi recusandae nisi accusamus ipsa consequuntur</p>
+    {% if "user_id" in session %}
+        <div class="flex">
+            {% for recipe in user_recipes %}
+                <div class="card">
+                    <h2>{{ recipe["recipe_name"] }}</h2>
+                    <h3>{{ recipe["description"] }}</h3>
+                        {% for ingredient in recipes_ingredients %}
+                            {% if ingredient["recipe_id"] == recipe["id"] %}
+                            <div class="ingredients">
+                                <p>{{ ingredient["name"] }}:</p>
+                                <p>{{ ingredient["weight"] }} gramms</p>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                <button>Adapt recipe</button>
+                <button>Get baker percentages</button>
+                <button>Check logs</button>
+                <button>Delete recipe</button>
+                </div>
+            {% endfor %}
         </div>
-    </div>
+    {% endif %}
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Bread Engine{% endblock %}
+{% block title %} – Bread Engine{% endblock %}
 
 {% block main%}
     <div class="form-container">
@@ -12,8 +12,8 @@
             {% endif %}
         {% endwith %}
         <form action="/bread_engine" method="post" id="ingredient-form">
-            <input type="text" name="name" autocomplete="off" autofocus placeholder="Recipe Name"/>
-            <input type="text" name="description" autocomplete="off" placeholder="Recipe description">
+            <input type="text" name="name" autocomplete="off" autofocus placeholder="Recipe Name" value="{{ recipe if recipe }}"/>
+            <input type="text" name="description" autocomplete="off" placeholder="Recipe description" value ="{{ description if description }}">
             <button id="add-ingredient" type="button">Add ingredient</button>
             <select name="ingredient" id="ingredient">
                 {% for ingredient in ingredients %}

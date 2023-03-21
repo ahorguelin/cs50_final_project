@@ -18,15 +18,20 @@ c = conn.cursor()
 @app.route("/", methods=["GET", "POST"])
 def home():
     if "user_id" in session:
-        return render_template("recipes.html", title = "Home", user_id = session["user_id"])
+        user_recipes = c.execute("SELECT r.id, r.name as recipe_name, r.description FROM recipes r WHERE r.user_id = ?;", (session["user_id"],)).fetchall()
+        recipes_ingredients = c.execute("""
+                SELECT r.id as recipe_id, i.name, ri.weight FROM recipes r 
+                INNER JOIN recipe_ingredients ri on ri.recipe_id = r.id 
+                INNER JOIN ingredients i on i.id = ri.ingredient_id WHERE r.user_id = ?;""", (session["user_id"],)).fetchall()
+        return render_template("recipes.html", title = "Home", user_recipes = user_recipes,  recipes_ingredients = recipes_ingredients)
     else:
-        return render_template("recipes.html", title = "Home")
+        return render_template("layout.html", title = "Home")
     
 #Bread engine logic
 @app.route("/bread_engine", methods=["GET", "POST"])
 def bread():
+    db_ingredients = c.execute("SELECT * FROM ingredients")
     if request.method != 'POST':
-        db_ingredients = c.execute("SELECT * FROM ingredients")
         return render_template('bread_engine.html', ingredients = db_ingredients)
 
     #update ingredient to a dict with their name and weight in grammsso that they can be added to the recipe
@@ -34,6 +39,17 @@ def bread():
         recipe = request.form["name"]
         description = request.form["description"]
         form_ingredients = request.form.to_dict()
+
+        #form security
+        if (recipe == '' or description == ''):
+            flash('You must enter a recipe name and a description to continue.', 'info')
+            return render_template('bread_engine.html', ingredients = db_ingredients, recipe = recipe, description = description)
+                
+        for element in form_ingredients:
+            print(element)
+            if form_ingredients[element] == '':
+                flash('You cannot add an ingredient without a weight. Please try again', 'info')
+                return render_template('bread_engine.html', ingredients = db_ingredients, recipe = recipe, description = description)
 
         #removing elements not needed for the recipe.
         rem_result = ['name', 'description', 'ingredient']
@@ -51,12 +67,12 @@ def bread():
         for ingredient in form_ingredients.items():
             ingredient += (recipe_id,)
             data_to_insert.append(ingredient)
-        print(data_to_insert)
         #adding ingredients in the junction table
         c.executemany("INSERT INTO recipe_ingredients (ingredient_id, weight, recipe_id) VALUES (?,?,?)", data_to_insert)
         
         #commit recipe and ingredients to DB
         conn.commit()
+        flash('Username already taken, please try another.', 'info')
         return redirect('/')
 
 #register logic

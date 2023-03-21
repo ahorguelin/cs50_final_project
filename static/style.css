@@ -118,6 +118,39 @@ input[type=number] {
     margin: 0;
 }
 
+/* user recipes styling */
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1em;
+    margin: 2em;
+}
+
+.card{
+    margin: 0 2em;
+    padding: 2em;
+    width: auto;
+    max-width: 15em;
+    border: 1px solid black;
+    border-radius: 10%;
+}
+
+.card > h2{
+    margin: 0.5em 0;
+}
+
+.ingredients{
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em 0;
+}
+
+.ingredients > p{
+    display: inline;
+}
+
 
 /* Alerts style */
 
