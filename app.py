@@ -75,6 +75,65 @@ def bread():
         flash('Username already taken, please try another.', 'info')
         return redirect('/')
 
+#baker % logic
+@app.route("/baker_per", methods=["GET", "POST"])
+def baker_per():
+    if request.method != 'POST':
+        return redirect("/")
+    else:
+        #get id from recipe to display
+        recipe_id = request.form["recipe_id"]
+        # #get the ingredients & info from that recipe
+        recipe_info = c.execute("SELECT r.id, r.name as recipe_name, r.description FROM recipes r WHERE r.id = ?;", (recipe_id,)).fetchone()
+
+        #show all that beauty to my incredible user using function declared at the bottom of the file
+        return render_template("baker_per.html", recipe_info = recipe_info, recipes_ingredients = bread_calculator(recipe_id, 'ingredients'), baker_per = bread_calculator(recipe_id, 'baker_per'), total_flour = bread_calculator(recipe_id, 'total_flour'), total_weight = bread_calculator(recipe_id, 'dough_weight'))
+
+#recipe adaptor logic
+@app.route("/adapt", methods=['GET','POST'])
+def adapt():
+    if request.method != 'POST':
+        return redirect("/")
+    else:
+        #get recipe info
+        recipe_id = request.form["recipe_id"]
+        recipe_info = c.execute("SELECT r.id, r.name as recipe_name, r.description FROM recipes r WHERE r.id = ?;", (recipe_id,)).fetchone()
+
+        #get final dough weight
+        new_total_weight = 0
+        adapted_flour_weight = request.form["new_weight"]
+        #compute change in ingredient, add it to a new recipe array
+        adapted_recipe = []
+        new_flour_weight = float(adapted_flour_weight) / (bread_calculator(recipe_id, 'total_per')/100.0)
+        baker_per = bread_calculator(recipe_id, 'baker_per')
+        for ingredient in baker_per:
+            ingredient_dic = {}
+            ingredient_dic['name'] = ingredient['name']
+            ingredient_dic['weight'] = '{:.2f}'.format((float(ingredient['percentage'])/100) * float(new_flour_weight))
+            new_total_weight += float(ingredient_dic['weight'])
+            adapted_recipe.append(ingredient_dic)
+
+        return render_template("adapt.html", recipe_info = recipe_info, recipes_ingredients = bread_calculator(recipe_id, 'ingredients'), baker_per = bread_calculator(recipe_id, 'baker_per'), total_flour = bread_calculator(recipe_id, 'total_flour'), total_weight = bread_calculator(recipe_id, 'dough_weight'), adapted_recipe = adapted_recipe, new_total_weight = round(new_total_weight))
+        
+
+
+#delete recipe logic
+@app.route("/delete", methods=["GET", "POST"])
+def delete_recipe():
+    if request.method != 'POST':
+        return redirect("/")
+    else:
+        #get id from recipe to delete
+        recipe_id = request.form["recipe_id"]
+        #delete recipe
+        c.execute("DELETE FROM recipes WHERE id = ?", (recipe_id,))
+        c.execute("DELETE FROM recipe_ingredients WHERE recipe_id =?", (recipe_id,))
+        #commit removing the recipe and ingredients from db, inform the user
+        conn.commit()
+        flash("Recipe was deleted successfully", "info")
+        return redirect("/")
+
+
 #register logic
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -146,7 +205,65 @@ def logout():
     session.clear()
     return redirect('/')
 
+#create calculator to be reused
+def bread_calculator(recipe_id, return_value):
+    #get general information
+    recipes_ingredients = c.execute("""
+        SELECT r.id as recipe_id, i.name, ri.weight FROM recipes r 
+        INNER JOIN recipe_ingredients ri on ri.recipe_id = r.id 
+        INNER JOIN ingredients i on i.id = ri.ingredient_id WHERE r.id = ?;""", (recipe_id,)).fetchall()
+    
+    #return value = total_flour
+    if return_value == 'total_flour':
+        total_flour = 0
+        for ingredient in recipes_ingredients:
+            if ingredient['name'] == "White flour" or ingredient['name'] == "Whole-wheat flour":
+                total_flour += ingredient['weight']
+        return total_flour
+
+        
+    #return value = dough_weight
+    if return_value == 'dough_weight':
+        total_weight = 0
+        for ingredient in recipes_ingredients:
+            total_weight += ingredient['weight']
+        return total_weight
+    
+    #return value = ingredients
+    if return_value == 'ingredients':
+        return recipes_ingredients
+    
+    #return value = total_per
+    if return_value == 'total_per':
+        total_per = 0
+        total_flour = 0.0
+        for ingredient in recipes_ingredients:
+            if ingredient['name'] == "White flour" or ingredient['name'] == "Whole-wheat flour":
+                total_flour += ingredient['weight']
+        for ingredient in recipes_ingredients:
+            total_per += (ingredient['weight']/total_flour)*100
+        return total_per
+    
+    #return value = baker_per
+    if return_value == 'baker_per':
+        baker_per= []
+        total_flour = 0
+        #get the total amount of flour
+        for ingredient in recipes_ingredients:
+            if ingredient['name'] == "White flour" or ingredient['name'] == "Whole-wheat flour":
+                total_flour += ingredient['weight']
+
+        #generate baker percentages
+        for ingredient in recipes_ingredients:
+            ingredient_dic = {}
+            ingredient_dic["name"] = ingredient["name"] 
+            ingredient_dic["percentage"] = '{:.2f}'.format((ingredient['weight']/total_flour)*100)
+            baker_per.append(ingredient_dic)
+        return baker_per
+
+
 #launch the app
 if __name__ == "__main__":
     app.run()
+
 

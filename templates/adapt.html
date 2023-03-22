@@ -1,0 +1,14 @@
+{% extends "baker_per.html" %}
+{% block adapted %}
+    <div class="card">
+        <h2>{{ recipe_info["recipe_name"] }}</h2>
+        <h3>Recipe adapted to yield {{ new_total_weight }} grams of dough</h3>
+
+        {% for ingredient in adapted_recipe %}
+            <div class="ingredients">
+                <p>{{ ingredient["name"] }}:</p>
+                <p>{{ ingredient["weight"] }} gramms</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

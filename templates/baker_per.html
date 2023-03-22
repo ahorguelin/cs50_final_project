@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %} – Baker percentages{% endblock %}
+{% block main %}
+    <div class="card">
+        <h2>{{ recipe_info["recipe_name"] }}</h2>
+        <h3>{{ recipe_info["description"] }}</h3>
+        {% for ingredient in recipes_ingredients %}
+            <div class="ingredients">
+                <p>{{ ingredient["name"] }}:</p>
+                <p>{{ ingredient["weight"] }} gramms</p>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="card">
+        <h3>Baker percentages</h3>
+        <p>Reminder: percentage is based on the total amount of flour! In this recipe, total amount of flour is: {{ total_flour }} gramms.</p>
+        {% for ingredient in baker_per %}
+            <div class="ingredients">
+                <p>{{ ingredient["name"] }}:</p>
+                <p>{{ ingredient["percentage"] }} %</p>
+            </div>
+        {% endfor %}
+    </div>
+    {% block adapted %}{% endblock %}
+    <div>
+        <h2>Your current recipe yields {{ total_weight }} gramms of dough. Please enter a final dough weight in gramms if you want to change the yield.</h2>
+        <form action="/adapt" method="post">
+            <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe_info["id"] }}">
+            <input type="number" name="new_weight" placeholder="Final dough weight">
+            <input type="submit" value="Adapt recipe">
+        </form>
+    </div>
+{% endblock %}

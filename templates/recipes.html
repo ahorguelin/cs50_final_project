@@ -3,7 +3,14 @@
 {% block title %} – Recipes{% endblock %}
 
 {% block main %}
-    {% if "user_id" in session %}
+{% if "user_id" in session %}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="success">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div class="flex">
             {% for recipe in user_recipes %}
                 <div class="card">
@@ -17,10 +24,20 @@
                             </div>
                             {% endif %}
                         {% endfor %}
-                <button>Adapt recipe</button>
-                <button>Get baker percentages</button>
-                <button>Check logs</button>
-                <button>Delete recipe</button>
+                    <div class="action-forms">
+                        <form action="/baker_per" method="post">
+                            <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe["id"] }}">
+                            <input type="submit" value="Get baker percentages">
+                        </form>
+                        <form action="">
+                            <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe["id"] }}">
+                            <button>Check logs</button>
+                        </form>
+                        <form action="/delete" method="post">
+                            <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe["id"] }}">
+                            <input type="submit" value="Delete recipe">
+                        </form>
+                    </div>
                 </div>
             {% endfor %}
         </div>

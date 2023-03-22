@@ -151,6 +151,9 @@ input[type=number] {
     display: inline;
 }
 
+.input-hidden{
+    display: none;
+}
 
 /* Alerts style */
 

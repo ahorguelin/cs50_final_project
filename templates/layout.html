@@ -18,9 +18,8 @@
         {% if session["user_id"] %}
         <div class="navbar-tools">
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li><a href="/bread_engine">Bread-Engine</a></li>
-                <li><a href="#">Recipe-Adaptor</a></li>
                 <li><a href="#">Logs</a></li>
                 <li><a href="/logout">Log-out</a></li>
             </ul>
@@ -36,7 +35,7 @@
     </nav>
     <!-- Header with dynamic title -->
     <header>
-        <h1>CS Bakery{% block title %}{% endblock %} {{ user_id if user_id }}</h1>
+        <h1><a href="/">CS Bakery{% block title %}{% endblock %} {{ user_id if user_id }}</a></h1>
     </header>
     <!-- content blocks -->
     <!-- {% with messages = get_flashed_messages() %}
