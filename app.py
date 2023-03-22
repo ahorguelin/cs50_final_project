@@ -134,6 +134,30 @@ def delete_recipe():
         return redirect("/")
 
 
+#view logs logic
+@app.route("/recipe_logs", methods=["GET","POST"])
+def view_logs():
+    if request.method != 'POST':
+        user_id = session['user_id']
+        #recipe_logs = c.
+        return render_template('recipe_logs.html')
+    else:
+        recipe_id = request.form['recipe_id']
+        recipe_info = c.execute("SELECT r.id, r.name as recipe_name, r.description FROM recipes r WHERE r.id = ?;", (recipe_id,)).fetchone()
+        recipe_logs = c.execute("SELECT * FROM recipes_logs WHERE recipe_id = ? ORDER BY date ASC", (recipe_id,))
+        return render_template('recipe_logs.html', recipe_logs = recipe_logs, recipe_info = recipe_info)
+
+#add log
+@app.route('/add_logs', methods=['GET', 'POST'])
+def add_logs():
+    if request.method != 'POST':
+        return redirect('/')
+    else:
+        form_log = request.form.to_dict()
+        flash('Log added!', 'info')
+        return redirect('/recipe_logs')
+
+
 #register logic
 @app.route("/register", methods=["GET", "POST"])
 def register():
