@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function(){
         newInput.setAttribute('id', ingredient_name);
         newInput.setAttribute('type', 'number');
         newInput.setAttribute('step', '0.1');
+        newInput.setAttribute('min', '0');
         newInput.setAttribute('placeholder', 'Weight in gramms');
         newInput.setAttribute('name', ingredient_id);
         

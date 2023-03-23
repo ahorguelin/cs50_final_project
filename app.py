@@ -46,7 +46,6 @@ def bread():
             return render_template('bread_engine.html', ingredients = db_ingredients, recipe = recipe, description = description)
                 
         for element in form_ingredients:
-            print(element)
             if form_ingredients[element] == '':
                 flash('You cannot add an ingredient without a weight. Please try again', 'info')
                 return render_template('bread_engine.html', ingredients = db_ingredients, recipe = recipe, description = description)
@@ -138,10 +137,9 @@ def delete_recipe():
 @app.route("/recipe_logs", methods=["GET","POST"])
 def view_logs():
     if request.method != 'POST':
-        user_id = session['user_id']
-        #recipe_logs = c.
         return render_template('recipe_logs.html')
     else:
+        user_id = session['user_id']
         recipe_id = request.form['recipe_id']
         recipe_info = c.execute("SELECT r.id, r.name as recipe_name, r.description FROM recipes r WHERE r.id = ?;", (recipe_id,)).fetchone()
         recipe_logs = c.execute("SELECT * FROM recipes_logs WHERE recipe_id = ? ORDER BY date ASC", (recipe_id,))
@@ -153,9 +151,20 @@ def add_logs():
     if request.method != 'POST':
         return redirect('/')
     else:
+        recipe_id = request.form['recipe_id']
         form_log = request.form.to_dict()
+        log_to_insert = ()
+        for element in form_log.values():
+            if element == '':
+                flash('Please enter all the information in the form to add the log', 'info')
+                return redirect('/recipe_logs')
+            else:
+                log_to_insert += (element,)
+        c.execute("INSERT INTO recipes_logs (temperature, bf_time, proof_time, comment, recipe_id) VALUES(?,?,?,?,?)", log_to_insert)
+        conn.commit()
+        print(log_to_insert)
         flash('Log added!', 'info')
-        return redirect('/recipe_logs')
+        return redirect('/')
 
 
 #register logic

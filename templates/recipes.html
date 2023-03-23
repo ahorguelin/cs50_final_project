@@ -4,13 +4,15 @@
 
 {% block main %}
 {% if "user_id" in session %}
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p class="success">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
+        <div class="flash_message_container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="success">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
         <div class="flex">
             {% for recipe in user_recipes %}
                 <div class="card">
@@ -24,16 +26,16 @@
                             </div>
                             {% endif %}
                         {% endfor %}
-                    <div class="action-forms">
-                        <form action="/baker_per" method="post">
+                    <div class="action">
+                        <form class="action-form" action="/baker_per" method="post">
                             <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe["id"] }}">
                             <input type="submit" value="Get baker percentages">
                         </form>
-                        <form action="/recipe_logs" method="post">
+                        <form class="action-form" action="/recipe_logs" method="post">
                             <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe["id"] }}">
                             <input type="submit" value="Logs">
                         </form>
-                        <form action="/delete" method="post">
+                        <form class="action-form" action="/delete" method="post">
                             <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe["id"] }}">
                             <input type="submit" value="Delete recipe">
                         </form>

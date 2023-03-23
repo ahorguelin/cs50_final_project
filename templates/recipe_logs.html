@@ -12,20 +12,20 @@
     <h2>{{ recipe_info['description'] if recipe_info }}</h2>
     <h3>Logs</h3>
     <form action="/add_logs" method="post">
-        <input name="temperature" placeholder="Temperature">
-        <input name="bf_time" placeholder="Bulk fermentation time">
-        <input name="proof_time" placeholder="Proofing time">
-        <input name="comment" placeholder="Comment">
+        <input type="number" min="0" step="0.1" name="temperature" placeholder="Temperature">
+        <input type="number" min="0" step="0.1" name="bf_time" placeholder="Bulk fermentation time">
+        <input type="number" min="0" step="0.1" name="proof_time" placeholder="Proofing time">
+        <input type="text" name="comment" placeholder="Comment">
         <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe_info["id"] if recipe_info }}">
         <input type="submit" value="Add log">
     </form>
-    {% if recipes_logs%}
+    {% if recipe_logs %}
         {% for logs in recipe_logs %}
-            <p>{{ recipe_logs['date'] }}</p>
-            <p>{{ recipe_logs['temperature'] }}</p>
-            <p>{{ recipe_logs['bf_time'] }}</p>
-            <p>{{ recipe_logs['proof_time'] }}</p>
-            <p>{{ recipe_logs['comment'] }}</p>
+            <p>{{ logs['date'] }}</p>
+            <p>{{ logs['temperature'] }}</p>
+            <p>{{ logs['bf_time'] }}</p>
+            <p>{{ logs['proof_time'] }}</p>
+            <p>{{ logs['comment'] }}</p>
         {% endfor %}
     {% endif %}
 {% endblock %}

@@ -51,6 +51,11 @@
     margin: 1em 0;
 }
 
+.flash_message_container{
+    margin-top: 2em;
+    text-align: center;
+}
+
 a{
     text-decoration: none;
     color: #646464;
@@ -77,14 +82,14 @@ h1{
     margin: 1em 0;
 }
 
-form{
+.bread-form{
     margin: auto;
     max-width: 25vw;
     min-width: 300px;
     padding: 1em;
 }
 
-form input{
+.bread-form input{
     width: 100%;
     display: block;
     margin: 1em 0;
@@ -117,6 +122,17 @@ input[type=number]{
     width: 45%;
     padding: 0.5em;
     margin: 0;
+}
+
+/* action form styling */
+.action-form{
+    margin: 1em 0 0.5em 0;
+}
+
+
+.action-form > input{
+    padding: 0.5em;
+    width: 100%;
 }
 
 /* user recipes styling */
