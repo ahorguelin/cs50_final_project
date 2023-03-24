@@ -193,7 +193,7 @@ input[type=submit]:hover{
 
 /* action form styling */
 .action-form{
-    margin: 1em 0 0.5em 0;
+    margin-top: 1rem;
 }
 
 .action-form > input{
@@ -205,16 +205,20 @@ input[type=submit]:hover{
 .flex{
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
-    padding: 1em;
+    align-items: stretch;
+    gap: 1rem;
+}
+
+.flex > *{
+    flex: 1;
 }
 
 .card{
-    margin: auto;
+    position: relative;
     padding: 2em;
-    width: auto;
-    max-width: 15em;
+    min-width: 300px;
+    max-width: 25vw;
     border: none;
     border-radius: 10px;
     background:rgba(92, 92, 92, 0.301);
@@ -224,6 +228,7 @@ input[type=submit]:hover{
     -ms-transition: all .4s ease;
     -o-transition: all .4s ease;
     transition: all .4s ease;
+    animation: ease-right 0.5s;
 }
 
 .card:hover{
@@ -269,9 +274,7 @@ input[type=submit]:hover{
     font-weight: 600;
 }
 
-@media only screen and (max-width: 375px){
-    .card{
-        margin: auto;
-        width: 90vw;
-    }
+@keyframes ease-right {
+    from {transform: translateX(-30px);}
+    to {transform: translateX(0);}    
 }
