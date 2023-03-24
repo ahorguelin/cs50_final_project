@@ -13,7 +13,11 @@
 </head>
 <body>
     <!-- Hamburger menu-->
-    <button id="hamburger"></button>
+    <button id="hamburger">
+        <span class="icon-bar top"></span>
+        <span class="icon-bar middle"></span>
+        <span class="icon-bar bottom"></span>
+    </button>
     <nav class="navbar">
         {% if session["user_id"] %}
         <div class="navbar-tools">
@@ -34,9 +38,12 @@
         {% endif %}
     </nav>
     <!-- Header with dynamic title -->
-    <header>
-        <h1><a href="/">CS Bakery{% block title %}{% endblock %} {{ user_id if user_id }}</a></h1>
-    </header>
-    {% block main %}{% endblock %}
+    <div class="background-img">
+        <header>
+            <h1 class="title"><a href="/">{% if session["user_id"] %}{% block title %}{% endblock %}{% else %}CS50 Bakery{% endif %}</a></h1>
+            <h2>{% block subtitle %}{% endblock %}</h2>
+        </header>
+        {% block main %}{% endblock %}
+    </div>
 </body>
 </html>

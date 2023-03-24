@@ -1,14 +1,26 @@
 document.addEventListener('DOMContentLoaded', function(){
     let nav = document.querySelector('.navbar');
     let hamburger = document.querySelector('#hamburger');
+    let iconTop = document.querySelector('.icon-bar');
+    let iconMid = document.querySelector('.middle')
+    let iconBot = document.querySelector('.bottom')
     hamburger.addEventListener('click', function(){
         if (nav.classList.contains("show-menu")){
             nav.classList.remove("show-menu");
+            iconTop.classList.remove('animated')
+            iconMid.classList.remove('animated')
+            iconBot.classList.remove('animated')
         }
         else{
             nav.classList.add("show-menu");
+            iconTop.classList.add('animated')
+            iconMid.classList.add('animated')
+            iconBot.classList.add('animated')
         }
     })
+
+
+
     let btnAdd = document.querySelector('#add-ingredient');
     btnAdd.addEventListener('click', function(){
         //select the multiple choices
