@@ -16,16 +16,18 @@
         <div class="flex">
             {% for recipe in user_recipes %}
                 <div class="card">
-                    <h2>{{ recipe["recipe_name"] }}</h2>
-                    <h3>{{ recipe["description"] }}</h3>
-                        {% for ingredient in recipes_ingredients %}
-                            {% if ingredient["recipe_id"] == recipe["id"] %}
-                            <div class="ingredients">
-                                <p>{{ ingredient["name"] }}:</p>
-                                <p>{{ ingredient["weight"] }} gramms</p>
-                            </div>
-                            {% endif %}
-                        {% endfor %}
+                    <div class="recipe-info">
+                        <h2>{{ recipe["recipe_name"] }}</h2>
+                        <h3>{{ recipe["description"] }}</h3>
+                            {% for ingredient in recipes_ingredients %}
+                                {% if ingredient["recipe_id"] == recipe["id"] %}
+                                <div class="ingredients">
+                                    <p>{{ ingredient["name"] }}:</p>
+                                    <p>{{ ingredient["weight"] }} gramms</p>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                    </div>
                     <div class="action">
                         <form class="action-form" action="/baker_per" method="post">
                             <input type="number" class="input-hidden" name="recipe_id" value="{{ recipe["id"] }}">

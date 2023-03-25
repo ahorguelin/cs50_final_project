@@ -210,12 +210,10 @@ input[type=submit]:hover{
     gap: 1rem;
 }
 
-.flex > *{
-    flex: 1;
-}
-
 .card{
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 2em;
     min-width: 300px;
     max-width: 25vw;
