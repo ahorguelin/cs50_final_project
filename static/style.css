@@ -21,13 +21,12 @@
 
 /*menu*/
 .background-img{
-    background-color: var(--caramel);
     background-image: url('/static/images/rm187-adj-24.jpg');
+    background-color: var(--caramel);
     background-size:cover;
     min-height: 100vh;
     background-repeat: repeat-y;
     background-blend-mode:luminosity;
-    position: absolute;
 }
 
 #hamburger{
@@ -52,7 +51,7 @@
     display: block;
     width: 3em;
     height: 6px;
-    margin: 6px 0;
+    margin-bottom: 6px;
     background-color: var(--beige);
 }
 
@@ -77,7 +76,7 @@
 }
 
 .navbar{
-    z-index: 998;
+    z-index: 2;
     height: 100vh;
     width: 100vw;
     position: absolute;
@@ -110,6 +109,7 @@
 a{
     text-decoration: none;
     color: var(--beige);
+    transition: 0.5s;
 }
 
 a:hover{
@@ -118,9 +118,8 @@ a:hover{
 
 header{
     width: 100vw;
-    position: sticky;
+    padding: 1rem 0;
     text-align: center;
-    padding: 1em 0;
     background:rgba(0, 0, 0, 0.301);
     backdrop-filter: blur(10px);
     box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.212);
@@ -128,6 +127,19 @@ header{
 
 h1, h2, h3{
     color: var(--beige);
+    text-align: center;
+}
+
+.title-info{
+    margin: auto;
+    margin-top: 1rem;
+}
+
+.title-glass{
+    background:rgba(0, 0, 0, 0.301);
+    backdrop-filter: blur(10px);
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.212);
+    max-width: max-content;
 }
 
 /* Register & login style */
@@ -143,7 +155,7 @@ h1, h2, h3{
     padding-top: 1em;
 }
 
-.general-form input{
+input{
     width: 100%;
     display: block;
     margin: 1em 0;
@@ -153,12 +165,31 @@ h1, h2, h3{
     box-sizing: border-box;
 }
 
+input:focus{
+    outline: none;
+    box-shadow: 1px 0px 10px var(--beige);
+    border-radius: 10px;
+}
+
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
+input[type=text]{
+    color: var(--brown);
+    font-weight: 600;
+    background-color: var(--off-white);
+    border: none;
+    border-radius: 5px;
+}
+
 input[type=number]{
+    color: var(--brown);
+    font-weight: 600;
+    background-color: var(--off-white);
+    border: none;
+    border-radius: 5px;
     -moz-appearance: textfield;
     appearance: textfield;
 }
@@ -178,17 +209,54 @@ input[type=submit]:hover{
 
 /* Dynamic for styling */
 .input{
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
-    margin: 1em 0;
+
 }
 
 .dynamic-input{
     display: inline;
-    width: 45%;
-    padding: 0.5em;
-    margin: 0;
+    width: 70%;
+}
+
+label{
+    color: var(--beige);
+    font-size: 1rem;
+    text-align: left;
+}
+
+button{
+    padding: 0.5rem;
+    background-color: var(--off-white);
+    border: none;
+    border-radius: 5px;
+    color: var(--brown);
+    transition: 0.1s;
+}
+
+button:hover{
+    background-color: var(--caramel);
+    color: var(--off-white);    
+}
+
+select{
+    padding: 0 0.5rem;
+    text-align: center;
+    background-color: var(--off-white);
+    border: none;
+    border-radius: 5px;
+    color: var(--brown);
+    transition: 0.1s;
+}
+
+.rmv-ingredient{
+    margin-left:10px;
+    border-radius: 40%;
+}
+
+.rmv-ingredient:hover{
+    background-color: var(--red);
 }
 
 /* action form styling */
@@ -204,6 +272,7 @@ input[type=submit]:hover{
 /* user recipes styling */
 .flex{
     display: flex;
+    padding-top: 2rem;
     justify-content: center;
     flex-wrap: wrap;
     align-items: stretch;
@@ -258,21 +327,81 @@ input[type=submit]:hover{
 
 /* Alerts style */
 .flash_message_container{
-    padding-top: 2em;
     text-align: center;
 }
 
 .success{
-    color: #53dd91;
+    text-align: center;
+    color: var(--caramel);
+    background-color: var(--off-white);
     font-weight: 600;
 }
 
 .warning{
-    color: #FFB5A7;
+    text-align: center;
+    color: var(--red);
+    background-color: var(--off-white);
     font-weight: 600;
 }
 
+/* Logs styling */
+.collapsible{
+    padding: 0.5rem;
+}
+
+.collapsible-div{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+
+
+
+/*logs table*/
+table{
+    margin: auto;
+    padding: 1rem;
+    color: var(--off-white);
+    border: none;
+    border-radius: 10px;
+    background:rgba(92, 92, 92, 0.301);
+    backdrop-filter: blur(10px);
+}
+
+th{
+    padding:  0.5rem 2rem;
+    text-align: left;
+}
+
+td{
+    padding:  0.5rem 2rem;
+    text-align: left;
+}
+
+
+/* animations & media queries */
 @keyframes ease-right {
     from {transform: translateX(-30px);}
     to {transform: translateX(0);}    
+}
+
+@media screen and (max-width: 375px) {
+    .title{
+        font-size: 1.5rem;
+    }
+    #hamburger{
+        width: 2rem;
+        height: 2rem;
+        left: 1rem;
+    }
+
+    .icon-bar{
+        width: 2rem;
+        height: 5px;
+        margin: 6px 0;
+        background-color: var(--beige);
+    }
+    
+    
 }

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}All logs{% endblock %}
+{% block main %}
+<br>
+    {% if log_count != 0 %}
+        <table>
+            <thead>
+                <th>Date</th>
+                <th>Recipe name</th>
+                <th>Temperature</th>
+                <th>Bulk fermentation time</th>
+                <th>Proofing time</th>
+                <th>Comment</th>
+            </thead>
+            {% for log in recipe_logs %}
+            <tr>
+                <td>{{ log["date"] }}</td>
+                <td>{{ log["name"] }}</td>
+                <td>{{ log["temperature"] }}</td>
+                <td>{{ log["bf_time"] }}</td>
+                <td>{{ log["proof_time"] }}</td>
+                <td>{{ log["comment"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+    <h2 class="title-info">No logs yet</h2>    
+    {% endif %}
+{% endblock %}

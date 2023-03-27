@@ -14,15 +14,15 @@
         <form class="general-form" action="/bread_engine" method="post" id="ingredient-form">
             <input type="text" name="name" autocomplete="off" autofocus placeholder="Recipe Name" value="{{ recipe if recipe }}"/>
             <input type="text" name="description" autocomplete="off" placeholder="Recipe description" value ="{{ description if description }}">
-            <button id="add-ingredient" type="button">Add ingredient</button>
-            <select name="ingredient" id="ingredient">
-                {% for ingredient in ingredients %}
-                    <option value="{{ ingredient['id'] }}">{{ ingredient['name'] }}</option>
-                {% endfor %}
-            </select>
+            <div class="ingredients">
+                <button id="add-ingredient" type="button">Add ingredient</button>
+                <select name="ingredient" id="ingredient">
+                    {% for ingredient in ingredients %}
+                        <option value="{{ ingredient['id'] }}">{{ ingredient['name'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div id="inputs-placeholder"></div>
-            <select name="ingredient" id="added-ingredient"></select>
-            <button id="rmv-ingredient" type="button">Remove ingredient</button>
             <input type="submit" value="Add Recipe">
         </form>
     </div>

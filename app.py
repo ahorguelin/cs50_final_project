@@ -114,8 +114,6 @@ def adapt():
 
         return render_template("adapt.html", recipe_info = recipe_info, recipes_ingredients = bread_calculator(recipe_id, 'ingredients'), baker_per = bread_calculator(recipe_id, 'baker_per'), total_flour = bread_calculator(recipe_id, 'total_flour'), total_weight = bread_calculator(recipe_id, 'dough_weight'), adapted_recipe = adapted_recipe, new_total_weight = round(new_total_weight))
         
-
-
 #delete recipe logic
 @app.route("/delete", methods=["GET", "POST"])
 def delete_recipe():
@@ -127,23 +125,35 @@ def delete_recipe():
         #delete recipe
         c.execute("DELETE FROM recipes WHERE id = ?", (recipe_id,))
         c.execute("DELETE FROM recipe_ingredients WHERE recipe_id =?", (recipe_id,))
+        c.execute("DELETE FROM recipes  _logs WHERE recipe_id =?", (recipe_id,))
         #commit removing the recipe and ingredients from db, inform the user
         conn.commit()
         flash("Recipe was deleted successfully", "info")
         return redirect("/")
 
+#view general logs logic
+@app.route('/logs')
+def logs():
+    user_id = session['user_id']
+    recipe_logs = c.execute("""SELECT r.name as name, * FROM recipes_logs rl 
+    INNER JOIN recipes r on r.id = rl.recipe_id
+    INNER JOIN users u on u.id = r.user_id
+    WHERE u.id = ? ORDER BY date DESC""", 
+    (user_id,)).fetchall()
+    log_count = len(recipe_logs)
+    return render_template('user_logs.html', recipe_logs = recipe_logs, log_count = log_count)
 
-#view logs logic
+#view recipe logs logic
 @app.route("/recipe_logs", methods=["GET","POST"])
 def view_logs():
     if request.method != 'POST':
         return render_template('recipe_logs.html')
     else:
-        user_id = session['user_id']
         recipe_id = request.form['recipe_id']
         recipe_info = c.execute("SELECT r.id, r.name as recipe_name, r.description FROM recipes r WHERE r.id = ?;", (recipe_id,)).fetchone()
-        recipe_logs = c.execute("SELECT * FROM recipes_logs WHERE recipe_id = ? ORDER BY date ASC", (recipe_id,))
-        return render_template('recipe_logs.html', recipe_logs = recipe_logs, recipe_info = recipe_info)
+        recipe_logs = c.execute("SELECT * FROM recipes_logs WHERE recipe_id = ? ORDER BY date DESC", (recipe_id,)).fetchall()
+        log_count = len(recipe_logs)
+        return render_template('recipe_logs.html', recipe_logs = recipe_logs, recipe_info = recipe_info, log_count = log_count)
 
 #add log
 @app.route('/add_logs', methods=['GET', 'POST'])
