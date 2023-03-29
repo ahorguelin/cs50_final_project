@@ -6,8 +6,6 @@ import sqlite3
 app = Flask(__name__)
 #secret key to use session
 app.secret_key = "secretkey"
-app.config['DEBUG'] = True
-app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 #setting up db -- table were created separately -- using row factory to get dictionaries
 conn = sqlite3.connect('bakery.db', check_same_thread=False)
@@ -71,7 +69,7 @@ def bread():
         
         #commit recipe and ingredients to DB
         conn.commit()
-        flash('Username already taken, please try another.', 'info')
+        flash('Recipe successfuly added!', 'info')
         return redirect('/')
 
 #baker % logic
@@ -125,7 +123,7 @@ def delete_recipe():
         #delete recipe
         c.execute("DELETE FROM recipes WHERE id = ?", (recipe_id,))
         c.execute("DELETE FROM recipe_ingredients WHERE recipe_id =?", (recipe_id,))
-        c.execute("DELETE FROM recipes  _logs WHERE recipe_id =?", (recipe_id,))
+        c.execute("DELETE FROM recipes_logs WHERE recipe_id =?", (recipe_id,))
         #commit removing the recipe and ingredients from db, inform the user
         conn.commit()
         flash("Recipe was deleted successfully", "info")
